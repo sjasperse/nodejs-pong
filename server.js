@@ -16,7 +16,13 @@ function rawBody(req, res, next) {
 
 app.use(rawBody);
 
-app.all('\*', function (req, res) {
+app.all('\*', async (req, res) => {
+  var responseDelay = req.get('response-delay');
+  if (responseDelay) {
+    await new Promise((resolve, reject) => {
+      setTimeout(resolve, parseInt(responseDelay));
+    });
+  }
 
   var response = '';
 
